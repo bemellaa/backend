@@ -1,8 +1,6 @@
 package com.example.crud.controller;
 
 
-import com.example.crud.model.Persona;
-import com.example.crud.repository.PersonaRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

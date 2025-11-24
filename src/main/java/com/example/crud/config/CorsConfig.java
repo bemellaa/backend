@@ -13,9 +13,9 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8080-la-ruta-de-Front-vercel")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                registry.addMapping("/**") // Permitir todas las URLs
+                        .allowedOrigins("http://localhost:3000") // Solo permitir a tu React
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Verbos permitidos
                         .allowedHeaders("*");
             }
         };
