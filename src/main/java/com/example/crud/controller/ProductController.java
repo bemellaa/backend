@@ -31,4 +31,22 @@ public class ProductController {
     public void deleteProduct(@PathVariable Long id) {
         productRepository.deleteById(id);
     }
+
+    @PutMapping("/{id}")
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
+        // 1. Buscamos el producto en la BD
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + id));
+
+        // 2. Actualizamos sus datos con los nuevos
+        product.setName(productDetails.getName());
+        product.setPrice(productDetails.getPrice());
+        product.setDescription(productDetails.getDescription());
+        product.setImage(productDetails.getImage());
+        product.setCategory(productDetails.getCategory());
+        product.setStock(productDetails.getStock());
+
+        // 3. Guardamos los cambios
+        return productRepository.save(product);
+    }
 }
