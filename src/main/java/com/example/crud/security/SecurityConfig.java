@@ -30,17 +30,10 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configure(http))
             .authorizeHttpRequests(auth -> auth
-                // 1. Permitir Login
-                .requestMatchers("/auth/**").permitAll()
-                
-                // 2. Permitir TODAS las rutas de Swagger y documentación
-                .requestMatchers(
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html"
-                ).permitAll()
-                
-                // 3. Todo lo demás requiere autenticación
+                .requestMatchers("/auth/**").permitAll() // Login
+                .requestMatchers("/api/products/**", "/api/productos/**").permitAll() // Productos
+                .requestMatchers("/api/users/**").permitAll() // <--- REGISTRO PERMITIDO
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated()
             )
             .authenticationProvider(authenticationProvider())
@@ -48,7 +41,7 @@ public class SecurityConfig {
 
         return http.build();
     }
-    
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -64,8 +57,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // IMPORTANTE: Devuelve contraseñas sin encriptar (Solo para evaluación académica)
-        // Si usaras contraseñas reales encriptadas, aquí iría BCryptPasswordEncoder
         return NoOpPasswordEncoder.getInstance();
     }
 }

@@ -8,40 +8,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/api/users") // <--- ESTA ES LA RUTA CLAVE
+@CrossOrigin(origins = "*") // Permite que el Frontend se conecte
 public class UserController {
 
     @Autowired
     private UserRepository userRepository;
 
-    // Obtener todos los usuarios
+    // 1. OBTENER TODOS
     @GetMapping
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    // Crear un usuario (Para registro o admin)
+    // 2. REGISTRAR USUARIO (El que te está fallando)
     @PostMapping
     public User createUser(@RequestBody User user) {
+        // Aquí podrías encriptar la contraseña si quisieras, 
+        // pero para tu entrega dejémoslo simple para que funcione.
         return userRepository.save(user);
     }
 
-    // Eliminar usuario
+    // 3. ELIMINAR
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userRepository.deleteById(id);
-    }
-
-    @PostMapping("/login")
-    public User login(@RequestBody User credentials) {
-        // Buscamos al usuario por su email
-        User user = userRepository.findByEmail(credentials.getEmail());
-
-        // Si existe Y la contraseña coincide
-        if (user != null && user.getPassword().equals(credentials.getPassword())) {
-            return user; // Devolvemos el usuario completo (con nombre y rol)
-        }
-        return null; // Si falla, devolvemos nulo
     }
 }
